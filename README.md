@@ -4,7 +4,7 @@
 
 <div align="center">
 
-![License](https://img.shields.io/badge/license-AGPL--3.0-orange?style=for-the-badge)
+[![License](https://img.shields.io/badge/license-AGPL--3.0-orange?style=for-the-badge)](LICENSE)
 ![Last Commit](https://img.shields.io/github/last-commit/meme-bank/api?style=for-the-badge)
 ![Repo Size](https://img.shields.io/github/repo-size/meme-bank/api?style=for-the-badge)
 ![.NET](https://img.shields.io/badge/.NET-10.0-blueviolet?style=for-the-badge)
@@ -20,7 +20,7 @@
 Исходный код ядра, то бишь API, Народного Банка Мемов
 
 ## Лицензия
-Этот проект распространяется под лицензией GNU Affero General Public License v3.0 (GNU AGPLv3). Согласно условиям, если вы используете это ПО для предоставления сетевых услуг (SaaS), вы обязаны предоставить исходный код своей версии пользователям.
+Этот проект распространяется под лицензией [GNU Affero General Public License v3.0 (GNU AGPLv3)](LICENSE). Согласно условиям, если вы используете это ПО для предоставления сетевых услуг (SaaS), вы обязаны предоставить исходный код своей версии пользователям.
 
 Проще говоря: Пиздить разрешается, закрывать нельзя
 
