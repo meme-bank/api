@@ -17,7 +17,7 @@ jobs:
       id: dotnet-version
       run: |
         # <TargetFramework>netX.X</TargetFramework>, где X - числа
-        VERSION=$(grep -oP '(?<=<TargetFramework>net)[0-9.]+' OctopusAPI/OctopusAPI.csproj)
+        VERSION=$(grep -oP '(?<=<TargetFramework>net)[0-9.]+' /OctopusAPI.csproj)
         echo "detected_version=$VERSION" >> $GITHUB_OUTPUT
     
     - name: Setup .NET
