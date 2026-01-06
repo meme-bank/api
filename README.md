@@ -1,8 +1,8 @@
-<center>
+<p align="center">
   <img src="docs/images/icon.svg" alt="Octopus Project Logo" width="250" style="padding: 20px">
-</center>
+</p>
 
-<center>
+<div align="center">
 
 ![License](https://img.shields.io/badge/license-AGPL--3.0-orange?style=for-the-badge)
 ![Last Commit](https://img.shields.io/github/last-commit/meme-bank/api?style=for-the-badge)
@@ -13,9 +13,9 @@
 [![Мы ВКонтукле](https://img.shields.io/badge/Мы_ВКонтукле-4680C2?style=for-the-badge&logo=vk&logoColor=white)](https://vk.com/membank_mm)
 [![Website](https://img.shields.io/badge/Сайтик-333333?style=for-the-badge&logo=link&logoColor=white)](https://membank.ru)
 
-</center>
+</div>
 
-# <center>Ядро НБМ (API) (Проект Octopus)</center>
+# <p align="center">Ядро НБМ (API) (Проект Octopus)</p>
 
 Исходный код ядра, то бишь API, Народного Банка Мемов
 
