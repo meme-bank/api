@@ -2,6 +2,7 @@
 
   <ItemGroup>
     <ProjectReference Include="..\MembankCore.Data\MembankCore.Data.csproj" />
+    <ProjectReference Include="..\MembankCore.Domain\MembankCore.Domain.csproj" />
   </ItemGroup>
 
   <PropertyGroup>
