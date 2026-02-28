@@ -1,2 +1,2 @@
-npm run format
-npm test
+dotnet format
+dotnet test
