@@ -57,3 +57,5 @@ nunit-*.xml
 
 # Workspace
 .vs
+
+node_modules
