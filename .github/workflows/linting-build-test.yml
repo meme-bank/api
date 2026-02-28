@@ -1,4 +1,4 @@
-name: .NET Build & Test
+name: .NET Linting & Build & Test
 
 on:
   push:
@@ -24,6 +24,10 @@ jobs:
       with:
         dotnet-version: ${{ steps.dotnet-version.outputs.detected_version }}
 
+    - name: Linting
+      run: |
+        dotnet format --verify-no-changes
+
     - name: Restore dependencies
       run: dotnet restore
 
@@ -31,4 +35,18 @@ jobs:
       run: dotnet build --no-restore --configuration Release
 
     - name: Test
-      run: dotnet test --no-build --verbosity normal --configuration Release
+      run: dotnet test --no-build --verbosity normal --configuration Release --collect:"XPlat Code Coverage" `
+        --results-directory ./coverage `
+        -- `
+        DataCollectionRunSettings.DataCollectors.DataCollector.Configuration.Exclude="[*Test*]*,[xunit*]*,][*/tests/*]"
+
+    - name: Generate Coverage Reports
+      uses: danielpalme/ReportGenerator-GitHub-Action@5.2.4
+      with:
+        reports: 'coverage/**/coverage.cobertura.xml'
+        targetdir: 'coveragereport'
+        reporttypes: 'MarkdownSummary'
+
+    - name: Upload Coverage Summary
+      run: cat coveragereport/Summary.md >> $GITHUB_STEP_SUMMARY
+

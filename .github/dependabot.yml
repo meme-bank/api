@@ -8,7 +8,12 @@ updates:
     labels:
       - "dependencies"
     commit-message:
-      prefix: "Обновление зависимостей: "
+      prefix: "chore (dependencies): "
+    groups:
+      dotnet-dependencies:
+        patterns:
+          - "*"
+          
   - package-ecosystem: "github-actions"
     directory: "/"
     schedule:
