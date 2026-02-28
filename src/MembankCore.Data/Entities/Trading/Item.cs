@@ -1,0 +1,16 @@
+using System.ComponentModel.DataAnnotations;
+using System.ComponentModel.DataAnnotations.Schema;
+
+namespace MembankCore.Data.Entities.Trading {
+  public class Item {
+    [Key]
+    public Guid ItemBlueprintId { get; set; }
+    [ForeignKey("ItemBlueprintId")]
+    public required ItemBlueprint ItemBlueprint { get; set; }
+    [Required]
+    public required int OwnerId { get; set; }
+    [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
+    public DateTime OwnedAt { get; set; }
+    public decimal Amount { get; set; }
+  }
+}

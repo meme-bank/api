@@ -1,0 +1,11 @@
+<Solution>
+  <Folder Name="/src/">
+    <Project Path="src/MembankCore.Data/MembankCore.Data.csproj" />
+    <Project Path="src/MembankCore.Domain/MembankCore.Domain.csproj" />
+    <Project Path="src/MembankCore.Services/MembankCore.Services.csproj" />
+    <Project Path="src/MembankCore/MembankCore.csproj" />
+  </Folder>
+  <Folder Name="/tests/">
+    <Project Path="tests/MembankCore.Services.Tests/MembankCore.Services.Tests.csproj" />
+  </Folder>
+</Solution>

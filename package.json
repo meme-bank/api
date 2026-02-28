@@ -1,0 +1,26 @@
+{
+  "name": "membank-core",
+  "version": "1.0.0",
+  "description": "Исходный код ядра, то бишь API, Народного Банка Мемов, сердца экономики Мемного мира.",
+  "directories": {
+    "doc": "docs",
+    "test": "tests"
+  },
+  "scripts": {
+    "lint": "dotnet format --verify-no-changes",
+    "test": "dotnet test",
+    "prepare": "husky",
+    "format": "dotnet format"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/meme-bank/core.git"
+  },
+  "keywords": [],
+  "author": "Клочков Артём Витальевич. <urtyomalyanov@gmail.com>",
+  "license": "AGPL-3.0-only",
+  "bugs": {
+    "url": "https://github.com/meme-bank/core/issues"
+  },
+  "homepage": "https://github.com/meme-bank/core#readme"
+}
