@@ -40,6 +40,8 @@ ScaffoldingReadMe.txt
 ~$*
 *~
 CodeCoverage/
+coverage/
+coveragereport/
 
 # MSBuild Binary and Structured Log
 *.binlog
@@ -54,4 +56,4 @@ TestResult.xml
 nunit-*.xml
 
 # Workspace
-octopus.code-workspace
+.vs
