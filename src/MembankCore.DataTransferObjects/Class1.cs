@@ -1,6 +1,5 @@
-﻿namespace MembankCore.DataTransferObjects;
+namespace MembankCore.DataTransferObjects;
 
-public class Class1
-{
+public class Class1 {
 
 }
