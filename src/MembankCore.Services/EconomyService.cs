@@ -33,9 +33,9 @@ namespace MembankCore.Services {
     }
 
     public async Task<bool> HasPrimeAsync(int buyerId) => await _context.ProvideServices
-        .AnyAsync(ps => ps.BuyerId == buyerId &&
-        ps.ServiceId == primeServiceId &&
-        (ps.ExpiresAt == null || ps.ExpiresAt > DateTime.UtcNow));
+            .AnyAsync(ps => ps.BuyerId == buyerId &&
+            ps.ServiceId == primeServiceId &&
+            (ps.ExpiresAt == null || ps.ExpiresAt > DateTime.UtcNow));
 
     public async Task<TransferNote> TransferAsync(Guid senderId, Guid receiverId, decimal amount, string currencyId, string? note, IDbContextTransaction? transaction, TransferNoteType type = TransferNoteType.Personal) {
       if (transaction == null) {
@@ -101,15 +101,12 @@ namespace MembankCore.Services {
     }
 
     public async Task<Wallet> CreateWalletAsync(int ownerId, string currencyId, string name) {
-      Wallet wallet = new() {
-        Id = Guid.NewGuid(),
-        OwnerId = ownerId,
-        CurrencyId = currencyId,
-        Balance = 0m,
-        CreatedAt = DateTime.UtcNow,
-        Name = name,
-        Currency = await _context.Currencies.FindAsync(currencyId) ?? throw new ArgumentException("Invalid currency ID")
-      };
+      Wallet wallet = new(
+          ownerId,
+          await _context.Currencies.FindAsync(currencyId) ?? throw new ArgumentException("Invalid currency ID"),
+          0m,
+          name
+      );
 
       _context.Wallets.Add(wallet);
       await _context.SaveChangesAsync();
@@ -118,9 +115,7 @@ namespace MembankCore.Services {
 
     }
     public async Task<Currency> CreateCurrencyAsync(string id, string name, int emmissionCountryId) {
-      Currency currency = new() {
-        Id = id,
-        Name = name,
+      Currency currency = new(id, name) {
         EmmissionCountryId = emmissionCountryId,
         MonochromePhoto = new Photo {
           Id = Guid.NewGuid(),
@@ -128,7 +123,6 @@ namespace MembankCore.Services {
           RequestedAt = DateTime.UtcNow,
           OwnerId = emmissionCountryId
         },
-        CreatedAt = DateTime.UtcNow
       };
 
       _context.Currencies.Add(currency);
@@ -137,4 +131,6 @@ namespace MembankCore.Services {
       return currency;
     }
   }
+
+
 }

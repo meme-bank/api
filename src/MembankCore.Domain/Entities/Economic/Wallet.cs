@@ -36,6 +36,7 @@ namespace MembankCore.Domain.Entities.Economic {
       Currency = currency;
       CurrencyId = currency.Id;
       Name = name;
+      Balance = balance;
     }
 
     /// <summary>
