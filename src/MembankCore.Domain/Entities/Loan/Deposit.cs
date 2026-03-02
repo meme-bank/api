@@ -12,5 +12,13 @@ namespace MembankCore.Domain.Entities.Loan {
     public DateTime LastInterestAccrual { get; set; } // Когда последний раз капал процент
     public DateTime MaturityDate { get; set; } // Когда депозит созревает
     public bool IsRenewed { get; set; } // Продлен ли депозит автоматически
+
+    // Методы
+
+    public void Increment(DateTime now, int daysInYear) {
+      decimal dailyInterest = (Amount * InterestRate) / daysInYear;
+      Amount += dailyInterest;
+      LastInterestAccrual = now;
+    }
   }
 }

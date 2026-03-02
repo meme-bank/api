@@ -8,5 +8,6 @@
   </Folder>
   <Folder Name="/tests/">
     <Project Path="tests/MembankCore.Services.Tests/MembankCore.Services.Tests.csproj" />
+    <Project Path="tests/MembankCore.Domain.Tests/MembankCore.Domain.Tests.csproj" />
   </Folder>
 </Solution>

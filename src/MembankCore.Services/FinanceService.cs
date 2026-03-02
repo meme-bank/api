@@ -9,6 +9,7 @@ namespace MembankCore.Services {
     private readonly MeduzaContext _context;
 
     private readonly Guid _bankWalletId = Guid.Parse("00000000-0000-0000-0000-000000000001");
+    private readonly int DaysInYear = 12;
 
     public FinanceService(EconomyService economyService, MeduzaContext context) {
       _economyService = economyService;
@@ -163,10 +164,7 @@ namespace MembankCore.Services {
             transaction: transaction
         );
 
-        loan.RemainingAmount -= amount;
-        if (loan.RemainingAmount <= 0) {
-          loan.Status = LoanStatus.Closed;
-        }
+        loan.Repay(amount);
 
         await _context.SaveChangesAsync();
         await transaction.CommitAsync();
@@ -188,11 +186,9 @@ namespace MembankCore.Services {
               .Where(d => d.MaturityDate > now && d.LastInterestAccrual.AddDays(1) <= now)
               .ToListAsync();
 
-      foreach (var deposit in pendingDeposits) {
+      foreach (Deposit deposit in pendingDeposits) {
         // Считаем доход за день (процентная ставка / 12 дней)
-        decimal dailyInterest = (deposit.Amount * deposit.InterestRate) / 12;
-        deposit.Amount += dailyInterest;
-        deposit.LastInterestAccrual = now;
+        deposit.Increment(now, DaysInYear);
       }
 
       // 2. Обработка кредитов (Начисляем проценты к долгу)
@@ -202,9 +198,7 @@ namespace MembankCore.Services {
 
       foreach (var loan in activeLoans) {
         // Кредитный процент капает в пользу банка
-        decimal dailyDebt = (loan.PrincipalAmount * loan.InterestRate) / 12; // По РП 12 дней = 1 год
-        loan.RemainingAmount += dailyDebt;
-        loan.LastInterestAccrual = now;
+        loan.Increment(now, DaysInYear);
       }
 
       await _context.SaveChangesAsync();
