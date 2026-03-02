@@ -9,19 +9,19 @@ namespace MembankCore.Domain.Entities.Loan {
     Closed
   }
 
-  public class Loan {
+  public class Loan(int borrowerId, decimal amount, Currency currency, decimal interestRate, LoanStatus status = LoanStatus.Pending) {
     public Guid Id { get; set; }
-    public int BorrowerId { get; set; } // Кто взял кредит
+    public int BorrowerId { get; set; } = borrowerId; // Кто взял кредит
 
-    public decimal PrincipalAmount { get; set; } // Тело кредита
-    public decimal RemainingAmount { get; set; } // Сколько осталось вернуть (с процентами)
-    public Currency? Currency { get; set; }
-    public required string CurrencyId { get; set; }
+    public decimal PrincipalAmount { get; set; } = amount; // Тело кредита
+    public decimal RemainingAmount { get; set; } = amount;// Сколько осталось вернуть (с процентами)
+    public Currency? Currency { get; set; } = currency;
+    public string CurrencyId { get; set; } = currency.Id;
 
-    public decimal InterestRate { get; set; } // Ставка (например, 0.15 для 15%)
-    public DateTime IssuedAt { get; set; }
-    public DateTime LastInterestAccrual { get; set; } // Когда последний раз капал процент
-    public LoanStatus Status { get; set; }
+    public decimal InterestRate { get; set; } = interestRate; // Ставка (например, 0.15 для 15%)
+    public DateTime IssuedAt { get; set; } = DateTime.UtcNow;
+    public DateTime LastInterestAccrual { get; set; } = DateTime.UtcNow; // Когда последний раз капал процент
+    public LoanStatus Status { get; set; } = status;
 
     // Методы
 

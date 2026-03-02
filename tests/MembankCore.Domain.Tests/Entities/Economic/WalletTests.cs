@@ -5,14 +5,7 @@ namespace MembankCore.Domain.Tests.Entities.Economic;
 
 public class WalletTests {
   private Wallet CreateTestWallet(decimal initialBalance = 0) {
-    return new Wallet {
-      Id = Guid.NewGuid(),
-      Name = "Test Wallet",
-      CurrencyId = "LMC",
-      Currency = null!,
-      Balance = initialBalance,
-      OwnerId = 1
-    };
+    return new Wallet(1, new("LMC", "Левро"), initialBalance, "Test");
   }
 
   [Fact]
@@ -49,7 +42,7 @@ public class WalletTests {
 
     // Act & Assert
     var exception = Assert.Throws<InvalidOperationException>(() =>
-            wallet.Withdraw(withdrawAmount));
+                    wallet.Withdraw(withdrawAmount));
 
     Assert.Contains("Недостаточно средств", exception.Message);
   }

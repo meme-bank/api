@@ -26,27 +26,21 @@ namespace MembankCore.Services {
         var hasPrime = await _economyService.HasPrimeAsync(wallet.OwnerId);
         var rate = hasPrime ? 0.08m : 0.05m;
 
-        var deposit = new Deposit {
-          OwnerId = wallet.OwnerId,
-          Amount = amount,
-          CreatedAt = DateTime.UtcNow,
-          CurrencyId = currencyId,
-          Currency = await _context.Currencies.FindAsync(currencyId),
-          Id = Guid.NewGuid(),
-          InterestRate = rate, // Пример фиксированной ставки, можно изменить логику по необходимости
-          IsRenewed = false,
-          LastInterestAccrual = DateTime.UtcNow,
-          MaturityDate = DateTime.UtcNow.AddDays(7) // Когда вклад даёт доход
-        };
+        Deposit deposit = new(
+                wallet.OwnerId,
+                 amount,
+            await _context.Currencies.FindAsync(currencyId),
+            rate
+        );
 
         await _economyService.TransferAsync(
-            senderId: walletId,
-            receiverId: _bankWalletId,
-            amount: amount,
-            currencyId: currencyId,
-            note: "Открытие вклада",
-            type: TransferNoteType.Buying,
-            transaction: transaction
+                senderId: walletId,
+                receiverId: _bankWalletId,
+                amount: amount,
+                currencyId: currencyId,
+                note: "Открытие вклада",
+                type: TransferNoteType.Buying,
+                transaction: transaction
         );
 
         _context.Deposits.Add(deposit);
@@ -72,26 +66,22 @@ namespace MembankCore.Services {
         var interestRate = hasPrime ? 0.10m : 0.15m;
 
         await _economyService.TransferAsync(
-            senderId: _bankWalletId,
-            receiverId: walletId,
-            amount: amount,
-            currencyId: currencyId,
-            note: "Выдача кредита",
-            type: TransferNoteType.Buying,
-            transaction: transaction
+                senderId: _bankWalletId,
+                receiverId: walletId,
+                amount: amount,
+                currencyId: currencyId,
+                note: "Выдача кредита",
+                type: TransferNoteType.Buying,
+                transaction: transaction
         );
 
-        var loan = new Loan {
-          BorrowerId = wallet.OwnerId,
-          PrincipalAmount = amount,
-          RemainingAmount = amount * (1 + interestRate),
-          InterestRate = interestRate,
-          IssuedAt = DateTime.UtcNow,
-          LastInterestAccrual = DateTime.UtcNow,
-          Status = LoanStatus.Approved,
-          CurrencyId = currencyId,
-          Currency = await _context.Currencies.FindAsync(currencyId),
-        };
+        var loan = new Loan(
+            wallet.OwnerId,
+            amount,
+            await _context.Currencies.FindAsync(currencyId),
+            interestRate,
+            LoanStatus.Approved
+        );
 
         _context.Loans.Add(loan);
         await _context.SaveChangesAsync();
@@ -118,13 +108,13 @@ namespace MembankCore.Services {
       var transaction = await _context.Database.BeginTransactionAsync();
       try {
         await _economyService.TransferAsync(
-            senderId: _bankWalletId,
-            receiverId: walletId,
-            amount: deposit.Amount,
-            currencyId: deposit.CurrencyId,
-            note: "Закрытие вклада",
-            type: TransferNoteType.Buying,
-            transaction: transaction
+                senderId: _bankWalletId,
+                receiverId: walletId,
+                amount: deposit.Amount,
+                currencyId: deposit.CurrencyId,
+                note: "Закрытие вклада",
+                type: TransferNoteType.Buying,
+                transaction: transaction
         );
 
         _context.Deposits.Remove(deposit);
@@ -155,13 +145,13 @@ namespace MembankCore.Services {
       var transaction = await _context.Database.BeginTransactionAsync();
       try {
         await _economyService.TransferAsync(
-            senderId: walletId,
-            receiverId: _bankWalletId,
-            amount: amount,
-            currencyId: loan.CurrencyId,
-            note: "Погашение кредита",
-            type: TransferNoteType.Buying,
-            transaction: transaction
+                senderId: walletId,
+                receiverId: _bankWalletId,
+                amount: amount,
+                currencyId: loan.CurrencyId,
+                note: "Погашение кредита",
+                type: TransferNoteType.Buying,
+                transaction: transaction
         );
 
         loan.Repay(amount);
@@ -183,8 +173,8 @@ namespace MembankCore.Services {
       // 1. Обработка депозитов (Начисляем доход игрокам)
       // Берём вклады, у которых пришло время начисления
       var pendingDeposits = await _context.Deposits
-              .Where(d => d.MaturityDate > now && d.LastInterestAccrual.AddDays(1) <= now)
-              .ToListAsync();
+                      .Where(d => d.MaturityDate > now && d.LastInterestAccrual.AddDays(1) <= now)
+                      .ToListAsync();
 
       foreach (Deposit deposit in pendingDeposits) {
         // Считаем доход за день (процентная ставка / 12 дней)
@@ -193,8 +183,8 @@ namespace MembankCore.Services {
 
       // 2. Обработка кредитов (Начисляем проценты к долгу)
       var activeLoans = await _context.Loans
-              .Where(l => l.Status == LoanStatus.Approved && l.LastInterestAccrual.AddDays(1) <= now)
-              .ToListAsync();
+                      .Where(l => l.Status == LoanStatus.Approved && l.LastInterestAccrual.AddDays(1) <= now)
+                      .ToListAsync();
 
       foreach (var loan in activeLoans) {
         // Кредитный процент капает в пользу банка

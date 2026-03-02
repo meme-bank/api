@@ -9,20 +9,34 @@ namespace MembankCore.Domain.Entities.Economic {
     public int OwnerId { get; set; }
 
     [Required]
-    public required string CurrencyId { get; set; }
+    public string CurrencyId { get; set; }
 
     [ForeignKey("CurrencyId")]
-    public required Currency Currency { get; set; }
+    public Currency Currency { get; set; }
 
     public decimal Balance { get; set; }
     public DateTime CreatedAt { get; set; } = DateTime.UtcNow;
 
     [Required]
-    public required string Name { get; set; }
+    public string Name { get; set; }
     public string? Description { get; set; }
 
     public ICollection<TransferNote> RecivedTransferNotes { get; set; } = new List<TransferNote>();
     public ICollection<TransferNote> SentTransferNotes { get; set; } = new List<TransferNote>();
+
+    /// <summary>
+    /// Создание кошелька.
+    /// </summary>
+    /// <param name="currency">Объект Currency, который является валютой кошелька.</param>
+    /// <param name="balance">Начальный баланс.</param>
+    /// <param name="name">Имя кошелька.</param>
+    /// <param name="currency">Объект Currency, который является валютой кошелька.</param>
+    public Wallet(int ownerId, Currency currency, decimal balance, string name) {
+      OwnerId = ownerId;
+      Currency = currency;
+      CurrencyId = currency.Id;
+      Name = name;
+    }
 
     /// <summary>
     /// Пополнение баланса.

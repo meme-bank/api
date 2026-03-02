@@ -1,19 +1,17 @@
 using MembankCore.Domain.Entities.Economic;
 
 namespace MembankCore.Domain.Entities.Loan {
-  public class Deposit {
+  public class Deposit(int ownerId, decimal amount, Currency currency, decimal interestRate = 0.05m) {
     public Guid Id { get; set; }
-    public int OwnerId { get; set; } // Владелец депозита
-    public decimal Amount { get; set; } // Сумма депозита
-    public Currency? Currency { get; set; }
-    public required string CurrencyId { get; set; }
-    public decimal InterestRate { get; set; } // Процентная ставка (например, 0.05 для 5%)
-    public DateTime CreatedAt { get; set; } // Когда создан депозит
-    public DateTime LastInterestAccrual { get; set; } // Когда последний раз капал процент
-    public DateTime MaturityDate { get; set; } // Когда депозит созревает
-    public bool IsRenewed { get; set; } // Продлен ли депозит автоматически
-
-    // Методы
+    public int OwnerId { get; set; } = ownerId;
+    public decimal Amount { get; set; } = amount;
+    public Currency? Currency { get; set; } = currency;
+    public string CurrencyId { get; set; } = currency.Id;
+    public decimal InterestRate { get; set; } = interestRate;
+    public DateTime CreatedAt { get; set; } = DateTime.UtcNow;
+    public DateTime LastInterestAccrual { get; set; } = DateTime.UtcNow;
+    public DateTime MaturityDate { get; set; } = DateTime.UtcNow.AddDays(7);
+    public bool IsRenewed { get; set; } = true;
 
     public void Increment(DateTime now, int daysInYear) {
       decimal dailyInterest = (Amount * InterestRate) / daysInYear;

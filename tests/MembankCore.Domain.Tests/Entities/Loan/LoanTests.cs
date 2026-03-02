@@ -4,19 +4,8 @@ using Xunit;
 namespace MembankCore.Domain.Tests.Entities.Loan;
 
 public class LoanTests {
-  private MembankCore.Domain.Entities.Loan.Loan CreateTestLoan(decimal principalAmount = 10_000m, decimal interestRate = 0.15m) {
-    return new MembankCore.Domain.Entities.Loan.Loan {
-      Id = Guid.NewGuid(),
-      CurrencyId = "LMC",
-      Currency = null!,
-      BorrowerId = 1,
-      PrincipalAmount = principalAmount,
-      RemainingAmount = principalAmount,
-      InterestRate = interestRate,
-      IssuedAt = DateTime.UtcNow,
-      LastInterestAccrual = DateTime.UtcNow,
-      Status = LoanStatus.Approved
-    };
+  private Domain.Entities.Loan.Loan CreateTestLoan(decimal principalAmount = 10_000m, decimal interestRate = 0.15m) {
+    return new Domain.Entities.Loan.Loan(1, principalAmount, new("LMC", "Левро"), interestRate, LoanStatus.Approved);
   }
 
   [Fact]
