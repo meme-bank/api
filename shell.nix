@@ -9,6 +9,14 @@ let
     dotnet-runtime = currentSdk;
     executables = [ "reportgenerator" ];
   };
+  # huskyDotNET = pkgs.buildDotnetGlobalTool {
+  #   pname = "Husky";
+  #   executables = [ "husky" ];
+  #   # dotnet-runtime = currentSdk;
+  #   dotnet-runtime = pkgs.dotnet-sdk_8;
+  #   version = "0.8.0";
+  #   nugetHash = "sha256-WBCOF5aEVjQZRzOwrS4W9TZ6+lSFUEL/Ej+f6RPy+KQ=";
+  # };
 in
 pkgs.mkShell {
   nativeBuildInputs = with pkgs; [
@@ -17,5 +25,7 @@ pkgs.mkShell {
     dotnet-ef
     dotnet-aspnetcore_10
     reportgenerator
+    # huskyDotNET
+    husky
   ];
 }
