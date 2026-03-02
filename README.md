@@ -49,11 +49,11 @@
 1. Для начала убедитесь, что у вас скачан .NET и ASP.NET. Скачать можно через пакетный менеджер Вашего дистрибутива, либо [отсюда](https://dotnet.microsoft.com/ru-ru/download). Также при развёртке нам понадобится [git](https://git-scm.com/install). Также понадобится PostgreSQL
 2. Клонируйте репозиторий:
 ```sh
-git clone git@github.com:meme-bank/core.git MembankAPI # Клонируем из github.com:meme-bank/api.git в папку MembankAPI
+git clone git@github.com:meme-bank/core.git MembankCore # Клонируем из github.com:meme-bank/api.git в папку MembankCore
 ```
 3. Перейдите в директорию:
 ```sh
-cd MembankAPI # Переходим в директорию MembankAPI
+cd MembankCore # Переходим в директорию MembankAPI
 ```
 4. Создайте базу данных и примените миграции:
 ```sh
@@ -72,7 +72,7 @@ dotnet run # Всё само скомпилируется и запуститс�
   - [Urtyom-Alyanov/nbm-1.1s](https://github.com/Urtyom-Alyanov/nbm-1.1s)
   - [Urtyom-Alyanov/octopus-bank](https://github.com/Urtyom-Alyanov/octopus-bank)
   - И потерянные навсегда версии...
-- Системы Автоматизированной Бюрократии (онги же бот-банки, боты-паспортисты):
+- Системы Автоматизированной Бюрократии (они же бот-банки, боты-паспортисты):
   - [Urtyom-Alyanov/lovuschkinsk-bot](https://github.com/Urtyom-Alyanov/lovuschkinsk-bot)
   - [Urtyom-Alyanov/umsr-bot](https://github.com/Urtyom-Alyanov/umsr-bot)
   - А также боты созданные на всяких проприетарных платформах (Бот-банк Гардернии, ранние версии бота Ловушниского)
