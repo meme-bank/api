@@ -16,7 +16,7 @@ jobs:
     - name: Extract .NET version from csproj
       id: dotnet-version
       run: |
-        VERSION=$(grep -oP '(?<=<TargetFramework>net)[0-9.]+' src/MembankCore/MembankCore.csproj)
+        VERSION=$(grep -oP '(?<=<TargetFramework>net)[0-9.]+' src/MembankCore.Web/MembankCore.Web.csproj)
         echo "detected_version=$VERSION" >> $GITHUB_OUTPUT
     
     - name: Setup .NET
