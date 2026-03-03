@@ -7,7 +7,7 @@ using Xunit;
 namespace MembankCore.Domain.Tests.Entities.Loan;
 
 public class LoanTests {
-  private readonly Currency _testCurrency = new("LMC", "Левро", new(1, PhotoType.Icon));
+  private readonly Currency _testCurrency = new("LMC", "Левро", 1.0m, new Photo(1, PhotoType.Icon));
 
   private Domain.Entities.Loan.Loan CreateTestLoan(decimal principalAmount = 10_000m, decimal interestRate = 0.15m) {
     // Создаем Money через статический метод или конструктор

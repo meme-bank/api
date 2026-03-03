@@ -48,6 +48,8 @@ public record Money : IComparable<Money> {
 
   // меж числом и Money
 
+  public static bool operator <=(Money a, decimal b) => a.Amount <= b;
+  public static bool operator >=(Money a, decimal b) => a.Amount >= b;
   public static bool operator <(Money a, decimal b) => a.Amount < b;
   public static bool operator >(Money a, decimal b) => a.Amount > b;
   public static bool operator ==(Money a, decimal b) => a.Amount == b;

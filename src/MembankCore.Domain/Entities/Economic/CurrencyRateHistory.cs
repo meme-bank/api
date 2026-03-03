@@ -7,6 +7,8 @@ public class CurrencyRateHistory {
   public decimal Rate { get; private set; }
   public DateTime ValidFrom { get; private set; }
 
+  protected CurrencyRateHistory() {}
+
   public CurrencyRateHistory(Currency currency, decimal rate, DateTime validFrom) {
     Currency = currency;
     CurrencyId = currency.Id;

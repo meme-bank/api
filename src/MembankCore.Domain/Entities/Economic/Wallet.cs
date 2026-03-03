@@ -25,10 +25,10 @@ namespace MembankCore.Domain.Entities.Economic {
     /// <summary>
     /// Создание кошелька.
     /// </summary>
-    /// <param name="currency">Объект Currency, который является валютой кошелька.</param>
+    /// <param name="ownerId">ID аккаунта, владеющего кошельком.</param>
     /// <param name="balance">Начальный баланс.</param>
     /// <param name="name">Имя кошелька.</param>
-    /// <param name="currency">Объект Currency, который является валютой кошелька.</param>
+    /// <param name="currency">Объект <see cref="Currency"/>, который является валютой кошелька.</param>
     public Wallet(int ownerId, Currency currency, Money balance, string name) {
       if (balance.CurrencyId != currency.Id)
         throw new ArgumentException("Валюта начального баланса не совпадает с валютой кошелька.");
@@ -44,7 +44,7 @@ namespace MembankCore.Domain.Entities.Economic {
     /// </summary>
     /// <param name="amount">Количество средств для перевода (в валюте кошелька)</param>
     public void Deposit(Money amount) {
-      if (amount < 0)
+      if (amount <= 0)
         throw new ArgumentException("Сумма пополнения не может быть отрицательной.", nameof(amount));
 
       if (amount.CurrencyId != this.CurrencyId)
@@ -59,7 +59,7 @@ namespace MembankCore.Domain.Entities.Economic {
     /// <param name="amount">Количество средств для перевода (в валюте кошелька)</param>
     /// <exception cref="InvalidOperationException">Если недостаточно средств.</exception>
     public void Withdraw(Money amount) {
-      if (amount < 0)
+      if (amount <= 0)
         throw new ArgumentException("Сумма снятия не может быть отрицательной.", nameof(amount));
 
       if (amount.CurrencyId != this.CurrencyId)

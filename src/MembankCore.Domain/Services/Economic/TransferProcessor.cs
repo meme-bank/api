@@ -1,32 +1,31 @@
 using MembankCore.Domain.Entities.Economic;
+using MembankCore.Domain.Interfaces.Services.Economic;
 using MembankCore.Domain.Services.Economic;
 using MembankCore.Domain.ValueObjects;
 
 namespace MembankCore.Domain.Services.Economic;
 
-public record TransferResult(
-    Money SentAmount,      // Сколько ушло в валюте отправителя (с комиссией)
-    Money ReceivedAmount,  // Сколько пришло в валюте получателя
-    Money Fee,             // Комиссия в исходной валюте перевода
-    decimal RateAtTransfer // Курс на момент операции
-);
+public class TransferProcessor : ITransferProcessor {
+  private readonly ICurrencyConverter _converter;
 
-public class TransferProcessor {
+  public TransferProcessor(ICurrencyConverter converter) {
+    _converter = converter;
+  }
+
   public TransferResult Execute(
     Wallet sender,
     Wallet receiver,
     Money amount,
     bool hasPrime,
-    TransferNoteType type,
-    CurrencyConverter converter
+    TransferNoteType type
   ) {
     var feePercentage = (hasPrime || type != TransferNoteType.Personal) ? 0m : 0.05m;
     var fee = new Money(amount.Amount * feePercentage, amount.CurrencyId);
 
     var totalToSpend = amount + fee;
 
-    var senderDebit = converter.Convert(totalToSpend, sender.Currency, sender.Currency);
-    var receiverCredit = converter.Convert(amount, sender.Currency, receiver.Currency);
+    var senderDebit = _converter.Convert(totalToSpend, sender.Currency, sender.Currency);
+    var receiverCredit = _converter.Convert(amount, sender.Currency, receiver.Currency);
 
     sender.Withdraw(senderDebit);
     receiver.Deposit(receiverCredit);

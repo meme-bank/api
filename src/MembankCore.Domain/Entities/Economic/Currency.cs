@@ -16,14 +16,14 @@ public class Currency {
   public virtual Photo MonochromePhoto { get; private set; } = null!; // symbol
 
   public int IssuerId { get; private set; } // country that emits this currency
-  public DateTime CreatedAt { get; private set; } = DateTime.UtcNow;
+  public DateTime CreatedAt { get; private set; }
   public DateTime LastRateUpdate { get; private set; }
 
   public IReadOnlyCollection<int> LegalTenderCountryIds => _legalTenderCountryIds.AsReadOnly();
   public IReadOnlyCollection<CurrencyRateHistory> RateHistory => _rateHistory.AsReadOnly();
 
 
-  public Currency(string code, string name, Photo symbol) {
+  public Currency(string code, string name, decimal rate, Photo symbol) {
     if (string.IsNullOrWhiteSpace(code) || code.Length != 3)
       throw new Exception("Код валюты должен состоять из 3 символов (ISO).");
 
@@ -31,7 +31,7 @@ public class Currency {
     Name = name;
     MonochromePhoto = symbol;
     MonochromePhotoId = symbol.Id;
-    ExchangeRate = 1.0m; // По умолчанию 1 к 1 к базе
+    ExchangeRate = rate;
     CreatedAt = DateTime.UtcNow;
   }
 

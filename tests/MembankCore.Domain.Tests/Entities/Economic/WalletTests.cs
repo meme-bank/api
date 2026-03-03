@@ -6,10 +6,10 @@ using Xunit;
 namespace MembankCore.Domain.Tests.Entities.Economic;
 
 public class WalletTests {
-  private readonly Currency _testCurrency = new("LMC", "Левро", new(1, PhotoType.Icon)); // Photo можно null для тестов, если логика позволяет
+  private readonly Currency _testCurrency = new("LMC", "Левро", 1.0m, new(1, PhotoType.Icon));
 
   private Wallet CreateTestWallet(decimal initialAmount = 0) {
-    var initialBalance = new Money(initialAmount, _testCurrency.Id);
+    Money initialBalance = new (initialAmount, _testCurrency.Id);
     return new Wallet(1, _testCurrency, initialBalance, "Test");
   }
 
@@ -25,6 +25,41 @@ public class WalletTests {
     // Assert
     Assert.Equal(150m, wallet.Balance.Amount);
     Assert.Equal(_testCurrency.Id, wallet.Balance.CurrencyId);
+  }
+
+  [Fact]
+  public void Withdraw_ShouldAllowEmptyingBalance_WhenAmountIsExactlyBalance() {
+    // Arrange
+    var wallet = CreateTestWallet(100m);
+    var fullAmount = new Money(100m, _testCurrency.Id);
+
+    // Act
+    wallet.Withdraw(fullAmount);
+
+    // Assert
+    Assert.Equal(0m, wallet.Balance.Amount);
+  }
+
+  [Fact]
+  public void Withdraw_WithWrongCurrency_ShouldThrowArgumentException() {
+    // Arrange
+    var wallet = CreateTestWallet(100m);
+    var foreignMoney = new Money(10m, "USD"); // Пытаемся списать USD с кошелька LMC
+
+    // Act & Assert
+    var ex = Assert.Throws<ArgumentException>(() => wallet.Withdraw(foreignMoney));
+    Assert.Contains("валют", ex.Message.ToLower());
+  }
+
+  [Theory]
+  [InlineData(0)]
+  public void Deposit_ShouldThrowArgumentException_WhenAmountIsZero(decimal zeroValue) {
+    // Arrange
+    var wallet = CreateTestWallet();
+    var zeroMoney = new Money(zeroValue, _testCurrency.Id);
+
+    // Act & Assert
+    Assert.Throws<ArgumentException>(() => wallet.Deposit(zeroMoney));
   }
 
   [Fact]

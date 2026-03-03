@@ -25,6 +25,7 @@ pkgs.mkShell {
     dotnet-ef
     dotnet-aspnetcore_10
     reportgenerator
+    nodejs_latest
     # huskyDotNET
     husky
     openssl
@@ -37,5 +38,6 @@ pkgs.mkShell {
     export MSBuildSDKsPath="${currentSdk}/share/dotnet/sdk/${currentSdk.version}/Sdks";
     export LD_LIBRARY_PATH="${pkgs.icu}/lib:${pkgs.openssl}/lib:${pkgs.zlib}/lib:$LD_LIBRARY_PATH";
     export DOTNET_SYSTEM_GLOBALIZATION_INVARIANT=0
+    alias project-tree="tree -I 'obj|bin|TestResults|coveragereport'"
   '';
 }
