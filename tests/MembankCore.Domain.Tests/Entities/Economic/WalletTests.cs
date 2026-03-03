@@ -9,7 +9,7 @@ public class WalletTests {
   private readonly Currency _testCurrency = new("LMC", "Левро", 1.0m, new(1, PhotoType.Icon));
 
   private Wallet CreateTestWallet(decimal initialAmount = 0) {
-    Money initialBalance = new (initialAmount, _testCurrency.Id);
+    Money initialBalance = new(initialAmount, _testCurrency.Id);
     return new Wallet(1, _testCurrency, initialBalance, "Test");
   }
 
