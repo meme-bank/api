@@ -27,5 +27,15 @@ pkgs.mkShell {
     reportgenerator
     # huskyDotNET
     husky
+    openssl
+    icu
+    zlib
   ];
+
+  shellHook = ''
+    export DOTNET_ROOT="${currentSdk}/share/dotnet";
+    export MSBuildSDKsPath="${currentSdk}/share/dotnet/sdk/${currentSdk.version}/Sdks";
+    export LD_LIBRARY_PATH="${pkgs.icu}/lib:${pkgs.openssl}/lib:${pkgs.zlib}/lib:$LD_LIBRARY_PATH";
+    export DOTNET_SYSTEM_GLOBALIZATION_INVARIANT=0
+  '';
 }

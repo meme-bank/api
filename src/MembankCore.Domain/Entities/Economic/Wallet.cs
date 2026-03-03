@@ -1,28 +1,28 @@
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
+using MembankCore.Domain.ValueObjects;
 
-namespace MembankCore.Domain.Entities.Economic {
-  public class Wallet {
-    [Key]
-    [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
-    public Guid Id { get; set; }
-    public int OwnerId { get; set; }
+namespace MembankCore.Domain.Entities.Economic
+{
+  public class Wallet
+  {
+    private readonly List<TransferNote> _recivedTransferNotes = [];
+    private readonly List<TransferNote> _sentTransferNotes = [];
 
-    [Required]
-    public string CurrencyId { get; set; }
+    public Guid Id { get; private set; }
+    public int OwnerId { get; private set; }
 
-    [ForeignKey("CurrencyId")]
-    public Currency Currency { get; set; }
+    public string CurrencyId => Balance.CurrencyId;
+    public Currency Currency { get; private set; }
 
-    public decimal Balance { get; set; }
-    public DateTime CreatedAt { get; set; } = DateTime.UtcNow;
+    public Money Balance { get; private set; }
+    public DateTime CreatedAt { get; private set; } = DateTime.UtcNow;
 
-    [Required]
-    public string Name { get; set; }
-    public string? Description { get; set; }
+    public string Name { get; private set; }
+    public string? Description { get; private set; }
 
-    public ICollection<TransferNote> RecivedTransferNotes { get; set; } = new List<TransferNote>();
-    public ICollection<TransferNote> SentTransferNotes { get; set; } = new List<TransferNote>();
+    public IReadOnlyCollection<TransferNote> RecivedTransferNotes => _recivedTransferNotes.AsReadOnly();
+    public IReadOnlyCollection<TransferNote> SentTransferNotes => _sentTransferNotes.AsReadOnly();
 
     /// <summary>
     /// Создание кошелька.
@@ -31,10 +31,13 @@ namespace MembankCore.Domain.Entities.Economic {
     /// <param name="balance">Начальный баланс.</param>
     /// <param name="name">Имя кошелька.</param>
     /// <param name="currency">Объект Currency, который является валютой кошелька.</param>
-    public Wallet(int ownerId, Currency currency, decimal balance, string name) {
+    public Wallet(int ownerId, Currency currency, Money balance, string name)
+    {
+      if (balance.CurrencyId != currency.Id)
+        throw new ArgumentException("Валюта начального баланса не совпадает с валютой кошелька.");
+
       OwnerId = ownerId;
       Currency = currency;
-      CurrencyId = currency.Id;
       Name = name;
       Balance = balance;
     }
@@ -43,9 +46,13 @@ namespace MembankCore.Domain.Entities.Economic {
     /// Пополнение баланса.
     /// </summary>
     /// <param name="amount">Количество средств для перевода (в валюте кошелька)</param>
-    public void Deposit(decimal amount) {
+    public void Deposit(Money amount)
+    {
       if (amount < 0)
         throw new ArgumentException("Сумма пополнения не может быть отрицательной.", nameof(amount));
+
+      if (amount.CurrencyId != this.CurrencyId)
+        throw new ArgumentException("Несоответствие валют при пополнении.");
 
       Balance += amount;
     }
@@ -55,12 +62,16 @@ namespace MembankCore.Domain.Entities.Economic {
     /// </summary>
     /// <param name="amount">Количество средств для перевода (в валюте кошелька)</param>
     /// <exception cref="InvalidOperationException">Если недостаточно средств.</exception>
-    public void Withdraw(decimal amount) {
+    public void Withdraw(Money amount)
+    {
       if (amount < 0)
         throw new ArgumentException("Сумма снятия не может быть отрицательной.", nameof(amount));
 
+      if (amount.CurrencyId != this.CurrencyId)
+        throw new ArgumentException("Несоответствие валют при снятии.");
+
       if (Balance < amount)
-        throw new InvalidOperationException($"Недостаточно средств на кошельке '{Name}'. Текущий баланс: {Balance}, требуется: {amount}");
+        throw new InvalidOperationException($"Недостаточно средств на кошельке '{Name}'. Текущий баланс: {Balance.Amount}, требуется: {amount.Amount}");
 
       Balance -= amount;
     }

@@ -2,37 +2,38 @@ using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 using MembankCore.Domain.Entities.Core;
 using MembankCore.Domain.Entities.Economic;
+using MembankCore.Domain.ValueObjects;
 
-namespace MembankCore.Domain.Entities.Trading {
-  public class Service {
-    [Key]
-    [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
-    public Guid Id { get; set; }
-    [Required]
-    public required string Name { get; set; }
-    [Required]
-    public required string Description { get; set; }
-    [Required]
-    public required Guid PhotoId { get; set; }
-    [ForeignKey("PhotoId")]
-    public required Photo Photo { get; set; }
-    public ServiceType Type { get; set; } = ServiceType.Once;
-    public int ProviderId { get; set; }
-    public decimal? Price { get; set; }
-    public string? CurrencyId { get; set; }
-    [ForeignKey("CurrencyId")]
-    public Currency? Currency { get; set; }
-    public List<Category> Categories { get; set; } = new List<Category>();
-    public TimeSpan? Duration { get; set; } // Nullable for once services or subscription services with no duration or end date
-    [Required]
-    public DateTime PublishedAt { get; set; }
-    public bool IsOtherActivate { get; set; } // Активируется вне платформы
+namespace MembankCore.Domain.Entities.Trading;
 
-    public ICollection<ProvideService> ProvideServices { get; set; } = new List<ProvideService>();
-  }
+public class Service
+{
+  private readonly List<Category> _catgories = [];
+  private readonly List<ProvideService> _provideServices = [];
 
-  public enum ServiceType {
-    Once,
-    Subscription,
-  }
+  public Guid Id { get; private set; }
+  public string Name { get; private set; }
+  public string Description { get; private set; }
+  public Guid PhotoId { get; private set; }
+  public virtual Photo Photo { get; private set; }
+
+  public ServiceType Type { get; private set; } = ServiceType.Once;
+  public int ProviderId { get; private set; }
+
+  public Money? Price { get; private set; }
+  public string? CurrencyId => Price.CurrencyId;
+  public virtual Currency? Currency { get; private set; }
+
+  public TimeSpan? Duration { get; private set; } // Nullable for once services or subscription services with no duration or end date
+  public DateTime PublishedAt { get; private set; }
+  public bool IsOtherActivate { get; private set; } // Активируется вне платформы
+
+  public IReadOnlyCollection<Category> Categories => _catgories.AsReadOnly();
+  public IReadOnlyCollection<ProvideService> ProvideServices => _provideServices.AsReadOnly();
+}
+
+public enum ServiceType
+{
+  Once,
+  Subscription,
 }
