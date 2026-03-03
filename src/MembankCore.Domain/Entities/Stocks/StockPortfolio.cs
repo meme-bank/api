@@ -1,7 +1,6 @@
 namespace MembankCore.Domain.Entities.Stocks;
 
-public class StockPortfolio(int ownerId, Stock stock, decimal quantity)
-{
+public class StockPortfolio(int ownerId, Stock stock, decimal quantity) {
   public int OwnerId { get; set; } = ownerId; // Владелец акций
 
   public decimal Quantity { get; set; } = quantity; // Сколько акций на руках

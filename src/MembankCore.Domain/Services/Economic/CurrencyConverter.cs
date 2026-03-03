@@ -1,12 +1,10 @@
-using MembankCore.Domain.ValueObjects;
 using MembankCore.Domain.Entities.Economic;
+using MembankCore.Domain.ValueObjects;
 
 namespace MembankCore.Domain.Services.Economic;
 
-public class CurrencyConverter
-{
-  public Money Convert(Money source, Currency sourceCurrency, Currency targetCurrency)
-  {
+public class CurrencyConverter {
+  public Money Convert(Money source, Currency sourceCurrency, Currency targetCurrency) {
     if (source.CurrencyId == targetCurrency.Id) return source;
 
     if (source.CurrencyId != sourceCurrency.Id)

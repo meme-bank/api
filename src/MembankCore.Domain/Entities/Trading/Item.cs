@@ -4,8 +4,7 @@ using System.ComponentModel.DataAnnotations.Schema;
 namespace MembankCore.Domain.Entities.Trading;
 
 // То, что в инвентаре
-public class Item
-{
+public class Item {
   public Guid ItemBlueprintId { get; private set; }
   public virtual ItemBlueprint ItemBlueprint { get; private set; }
 

@@ -4,8 +4,7 @@ using MembankCore.Domain.Entities.Core;
 
 namespace MembankCore.Domain.Entities.Trading;
 
-public class Category
-{
+public class Category {
   private readonly List<Service> _services = [];
   private readonly List<ItemBlueprint> _itemBlueprints = [];
 
@@ -16,8 +15,7 @@ public class Category
   public virtual IReadOnlyCollection<Service> Services => _services.AsReadOnly();
   public virtual IReadOnlyCollection<ItemBlueprint> ItemBlueprints => _itemBlueprints.AsReadOnly();
 
-  public Category(string name, Photo? icon = null)
-  {
+  public Category(string name, Photo? icon = null) {
     if (string.IsNullOrWhiteSpace(name))
       throw new Exception("Название категории не может быть пустым.");
 

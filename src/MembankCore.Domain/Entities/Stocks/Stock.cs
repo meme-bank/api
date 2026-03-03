@@ -4,8 +4,7 @@ using MembankCore.Domain.ValueObjects;
 
 namespace MembankCore.Domain.Entities.Stocks;
 
-public class Stock
-{
+public class Stock {
   public string Ticker { get; set; } // Например, "NBM" или "LVK"
   public int IssuerId { get; set; } // Компания, которая выпустила акции
 
@@ -15,8 +14,7 @@ public class Stock
   public virtual Currency Currency { get; set; }
   public string CurrencyId => CurrentPrice.CurrencyId;
 
-  public Stock(string ticker, int issuerId, decimal supply, Money price, Currency currency)
-  {
+  public Stock(string ticker, int issuerId, decimal supply, Money price, Currency currency) {
     if (price.CurrencyId != currency.Id)
       throw new Exception("Валюта суммы не совпадает с объектом валюты.");
 

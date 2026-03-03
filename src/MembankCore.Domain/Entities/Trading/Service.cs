@@ -6,8 +6,7 @@ using MembankCore.Domain.ValueObjects;
 
 namespace MembankCore.Domain.Entities.Trading;
 
-public class Service
-{
+public class Service {
   private readonly List<Category> _catgories = [];
   private readonly List<ProvideService> _provideServices = [];
 
@@ -32,8 +31,7 @@ public class Service
   public IReadOnlyCollection<ProvideService> ProvideServices => _provideServices.AsReadOnly();
 }
 
-public enum ServiceType
-{
+public enum ServiceType {
   Once,
   Subscription,
 }

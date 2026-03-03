@@ -5,8 +5,7 @@ namespace MembankCore.Domain.Entities.Core;
 
 public record PhotoMetadata(int Width, int Height, double AspectRatio);
 
-public class Photo
-{
+public class Photo {
   public Guid Id { get; private set; }
   public int OwnerId { get; private set; }
   public byte[]? Image { get; private set; }
@@ -16,16 +15,14 @@ public class Photo
 
   protected Photo() { }
 
-  public Photo(int ownerId, PhotoType type)
-  {
+  public Photo(int ownerId, PhotoType type) {
     Id = Guid.NewGuid();
     OwnerId = ownerId;
     Type = type;
     RequestedAt = DateTime.UtcNow;
   }
 
-  public void UploadContent(byte[] content)
-  {
+  public void UploadContent(byte[] content) {
     if (content == null || content.Length == 0)
       throw new Exception("Файл пуст.");
 
@@ -36,8 +33,7 @@ public class Photo
   public bool IsUploaded => Image != null;
 }
 
-public enum PhotoType
-{
+public enum PhotoType {
   Item, // 512x512 (1/1)
   Avatar, // 128x128 (1/1)
   Cover, // 1280x512 (5/2)

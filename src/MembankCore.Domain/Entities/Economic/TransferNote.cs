@@ -4,8 +4,7 @@ using MembankCore.Domain.ValueObjects;
 
 namespace MembankCore.Domain.Entities.Economic;
 
-public enum TransferNoteType
-{
+public enum TransferNoteType {
   Personal,
   Buying,
   Tax,
@@ -13,8 +12,7 @@ public enum TransferNoteType
   Subscription
 }
 
-public class TransferNote
-{
+public class TransferNote {
   public Guid Id { get; private set; }
   public TransferNoteType Type { get; private set; }
 
@@ -42,8 +40,7 @@ public class TransferNote
     Currency currency,
     Money amount,
     TransferNoteType type,
-    string? description = null)
-  {
+    string? description = null) {
     Id = Guid.NewGuid();
 
     SenderId = sender.Id;

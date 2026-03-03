@@ -2,10 +2,8 @@ using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 using MembankCore.Domain.ValueObjects;
 
-namespace MembankCore.Domain.Entities.Economic
-{
-  public class Wallet
-  {
+namespace MembankCore.Domain.Entities.Economic {
+  public class Wallet {
     private readonly List<TransferNote> _recivedTransferNotes = [];
     private readonly List<TransferNote> _sentTransferNotes = [];
 
@@ -31,8 +29,7 @@ namespace MembankCore.Domain.Entities.Economic
     /// <param name="balance">Начальный баланс.</param>
     /// <param name="name">Имя кошелька.</param>
     /// <param name="currency">Объект Currency, который является валютой кошелька.</param>
-    public Wallet(int ownerId, Currency currency, Money balance, string name)
-    {
+    public Wallet(int ownerId, Currency currency, Money balance, string name) {
       if (balance.CurrencyId != currency.Id)
         throw new ArgumentException("Валюта начального баланса не совпадает с валютой кошелька.");
 
@@ -46,8 +43,7 @@ namespace MembankCore.Domain.Entities.Economic
     /// Пополнение баланса.
     /// </summary>
     /// <param name="amount">Количество средств для перевода (в валюте кошелька)</param>
-    public void Deposit(Money amount)
-    {
+    public void Deposit(Money amount) {
       if (amount < 0)
         throw new ArgumentException("Сумма пополнения не может быть отрицательной.", nameof(amount));
 
@@ -62,8 +58,7 @@ namespace MembankCore.Domain.Entities.Economic
     /// </summary>
     /// <param name="amount">Количество средств для перевода (в валюте кошелька)</param>
     /// <exception cref="InvalidOperationException">Если недостаточно средств.</exception>
-    public void Withdraw(Money amount)
-    {
+    public void Withdraw(Money amount) {
       if (amount < 0)
         throw new ArgumentException("Сумма снятия не может быть отрицательной.", nameof(amount));
 

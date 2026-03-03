@@ -1,20 +1,17 @@
-using MembankCore.Domain.Services.Economic;
 using MembankCore.Domain.Entities.Economic;
+using MembankCore.Domain.Services.Economic;
 
 namespace MembankCore.Domain.ValueObjects;
 
-public record Money : IComparable<Money>
-{
+public record Money : IComparable<Money> {
   public decimal Amount { get; init; }
   public string CurrencyId { get; init; }
 
-  public Money ConvertTo(Currency targetCurrency, Currency sourceCurrency, CurrencyConverter converter)
-  {
+  public Money ConvertTo(Currency targetCurrency, Currency sourceCurrency, CurrencyConverter converter) {
     return converter.Convert(this, sourceCurrency, targetCurrency);
   }
 
-  public Money(decimal amount, string currencyId)
-  {
+  public Money(decimal amount, string currencyId) {
     if (string.IsNullOrWhiteSpace(currencyId))
       throw new Exception("CurrencyId обязателен для создания денежной суммы.");
 
@@ -22,8 +19,7 @@ public record Money : IComparable<Money>
     CurrencyId = currencyId;
   }
 
-  public int CompareTo(Money? other)
-  {
+  public int CompareTo(Money? other) {
     if (other is null) return 1;
     if (CurrencyId != other.CurrencyId)
       throw new InvalidOperationException($"Нельзя сравнивать разные валюты: {CurrencyId} и {other.CurrencyId}");

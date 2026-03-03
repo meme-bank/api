@@ -8,8 +8,7 @@ using Microsoft.EntityFrameworkCore;
 
 namespace MembankCore.Data.Base;
 
-public class MeduzaContext : DbContext
-{
+public class MeduzaContext : DbContext {
   // -- Database Connection -- //
   private string User = "meduza";
   private string DatabaseName = "meduza";
@@ -54,27 +53,23 @@ public class MeduzaContext : DbContext
               .UseNpgsql($"Server={Host};Port={Port};Database={DatabaseName};User Id={User};Password={Password}")
               .UseSnakeCaseNamingConvention();
 
-  protected override void OnModelCreating(ModelBuilder modelBuilder)
-  {
+  protected override void OnModelCreating(ModelBuilder modelBuilder) {
     base.OnModelCreating(modelBuilder);
     SetupRelationships(modelBuilder);
     SetupProperties(modelBuilder);
     SeedInitialData(modelBuilder);
   }
 
-  private void SetupProperties(ModelBuilder modelBuilder)
-  {
+  private void SetupProperties(ModelBuilder modelBuilder) {
     foreach (var property in modelBuilder.Model.GetEntityTypes()
     .SelectMany(t => t.GetProperties())
-    .Where(p => p.ClrType == typeof(decimal)))
-    {
+    .Where(p => p.ClrType == typeof(decimal))) {
       property.SetPrecision(18);
       property.SetScale(4);
     }
   }
 
-  private void SetupRelationships(ModelBuilder modelBuilder)
-  {
+  private void SetupRelationships(ModelBuilder modelBuilder) {
     // --- Many-to-many ---
     // Wallet <-> TransferNote
     modelBuilder.Entity<Wallet>()
@@ -99,8 +94,7 @@ public class MeduzaContext : DbContext
             .WithMany(c => c.ItemBlueprints);
 
     // ItemBlueprint <-> ItemBlueprint (Recipe)
-    modelBuilder.Entity<ItemBlueprintRecipe>(entity =>
-    {
+    modelBuilder.Entity<ItemBlueprintRecipe>(entity => {
       // Составной ключ, чтобы один и тот же ингредиент не дублировался в одном рецепте
       entity.HasKey(r => new { r.RecipeItemId, r.CraftItemId });
 
@@ -114,8 +108,7 @@ public class MeduzaContext : DbContext
     });
   }
 
-  private void SeedInitialData(ModelBuilder modelBuilder)
-  {
+  private void SeedInitialData(ModelBuilder modelBuilder) {
     var leuroCurrencyId = "LMC";
     var bankId = 3; // НБМ
     var fallelandId = 2; // Ловушкинск
@@ -125,8 +118,7 @@ public class MeduzaContext : DbContext
     var adminWalletId = Guid.Parse("00000000-0000-0000-0000-000000000123");
     var defaultPhotoId = "default_currency_photo";
 
-    modelBuilder.Entity<Photo>().HasData(new
-    {
+    modelBuilder.Entity<Photo>().HasData(new {
       Id = defaultPhotoId,
       OwnerId = bankId,
       Image = new byte[0], // Пустой массив для инициализации
@@ -135,8 +127,7 @@ public class MeduzaContext : DbContext
       Type = PhotoType.Icon // Или другой подходящий тип
     });
 
-    modelBuilder.Entity<Currency>().HasData(new
-    {
+    modelBuilder.Entity<Currency>().HasData(new {
       Id = leuroCurrencyId,
       Name = "Левро",
       ExchangeRate = 1.0m, // Эталон
@@ -145,8 +136,7 @@ public class MeduzaContext : DbContext
       MonochromePhotoId = "default_currency_photo"
     });
 
-    modelBuilder.Entity<Wallet>().HasData(new
-    {
+    modelBuilder.Entity<Wallet>().HasData(new {
       Id = bankWalletId,
       Name = "Резерв НБМ",
       Description = "Главный кошелек для сбора банковских комиссий и эмиссии",
@@ -156,8 +146,7 @@ public class MeduzaContext : DbContext
       CreatedAt = new DateTime(2020, 8, 25, 0, 0, 0, DateTimeKind.Utc)
     });
 
-    modelBuilder.Entity<Wallet>().HasData(new
-    {
+    modelBuilder.Entity<Wallet>().HasData(new {
       Id = fallelandWalletId,
       Name = "Резерв Ловушкинска",
       Description = "Главный кошелек для сбора налогов",
@@ -167,8 +156,7 @@ public class MeduzaContext : DbContext
       CreatedAt = new DateTime(2020, 8, 25, 0, 0, 0, DateTimeKind.Utc)
     });
 
-    modelBuilder.Entity<Wallet>().HasData(new
-    {
+    modelBuilder.Entity<Wallet>().HasData(new {
       Id = adminWalletId,
       Name = "Личный кошелек",
       Description = "Личный кошелек администратора системы",
@@ -178,15 +166,13 @@ public class MeduzaContext : DbContext
       CreatedAt = new DateTime(2020, 8, 25, 0, 0, 0, DateTimeKind.Utc)
     });
 
-    modelBuilder.Entity<Category>().HasData(new
-    {
+    modelBuilder.Entity<Category>().HasData(new {
       Id = Guid.Parse("00000000-0000-0000-0000-000000000002"),
       Name = "Банкинг",
       Description = "Услуги, связанные с банковскими операциями и финансовыми сервисами."
     });
 
-    modelBuilder.Entity<Service>().HasData(new
-    {
+    modelBuilder.Entity<Service>().HasData(new {
       CurrencyId = leuroCurrencyId,
       Id = Guid.Parse("00000000-0000-0000-0000-00000000A001"),
       Name = "НБМ Prime",
@@ -201,8 +187,7 @@ public class MeduzaContext : DbContext
     modelBuilder.Entity<Service>()
             .HasMany(s => s.Categories)
             .WithMany(c => c.Services)
-            .UsingEntity(j => j.HasData(new
-            {
+            .UsingEntity(j => j.HasData(new {
               ServicesId = Guid.Parse("00000000-0000-0000-0000-00000000A001"),
               CategoriesId = Guid.Parse("00000000-0000-0000-0000-000000000002")
             }));

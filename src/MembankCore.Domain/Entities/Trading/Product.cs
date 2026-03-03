@@ -5,8 +5,7 @@ using MembankCore.Domain.ValueObjects;
 
 namespace MembankCore.Domain.Entities.Trading;
 
-public class Product
-{
+public class Product {
   public Guid ItemBlueprintId { get; private set; }
   public virtual ItemBlueprint ItemBlueprint { get; private set; }
 

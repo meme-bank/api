@@ -1,6 +1,6 @@
-using MembankCore.Domain.ValueObjects;
 using MembankCore.Domain.Entities.Economic;
 using MembankCore.Domain.Services.Economic;
+using MembankCore.Domain.ValueObjects;
 
 namespace MembankCore.Domain.Services.Economic;
 
@@ -11,8 +11,7 @@ public record TransferResult(
     decimal RateAtTransfer // Курс на момент операции
 );
 
-public class TransferProcessor
-{
+public class TransferProcessor {
   public TransferResult Execute(
     Wallet sender,
     Wallet receiver,
@@ -20,8 +19,7 @@ public class TransferProcessor
     bool hasPrime,
     TransferNoteType type,
     CurrencyConverter converter
-  )
-  {
+  ) {
     var feePercentage = (hasPrime || type != TransferNoteType.Personal) ? 0m : 0.05m;
     var fee = new Money(amount.Amount * feePercentage, amount.CurrencyId);
 

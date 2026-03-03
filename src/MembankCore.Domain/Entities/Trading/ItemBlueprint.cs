@@ -4,8 +4,7 @@ using MembankCore.Domain.Entities.Core;
 
 namespace MembankCore.Domain.Entities.Trading;
 
-public class ItemBlueprint
-{
+public class ItemBlueprint {
   // Списки
   private readonly List<Category> _categories = new();
   private readonly List<ItemBlueprintRecipe> _recipe = new();
@@ -42,8 +41,7 @@ public class ItemBlueprint
 
   protected ItemBlueprint() { }
 
-  public ItemBlueprint(string name, string description, int ownerId, Photo photo)
-  {
+  public ItemBlueprint(string name, string description, int ownerId, Photo photo) {
     Id = Guid.NewGuid();
     Name = name;
     Description = description;
@@ -54,15 +52,13 @@ public class ItemBlueprint
     MeasuredIn = MeasuredIn.Pieces;
   }
 
-  public bool IsUsableBy(int userId)
-  {
+  public bool IsUsableBy(int userId) {
     if (IsOpenRecipe) return true;
     if (userId == OwnerCopyrightId) return true;
     return _copyrightIds.Contains(userId);
   }
 
-  public void AddToRecipe(ItemBlueprint ingredient, decimal amount)
-  {
+  public void AddToRecipe(ItemBlueprint ingredient, decimal amount) {
     if (ingredient.Id == this.Id)
       throw new Exception("Предмет не может требовать самого себя в рецепте.");
 
@@ -73,8 +69,7 @@ public class ItemBlueprint
       _recipe.Add(new ItemBlueprintRecipe(ingredient, this, amount));
   }
 
-  public void GrantCopyright(int ownerId, int targetUserId)
-  {
+  public void GrantCopyright(int ownerId, int targetUserId) {
     if (ownerId != OwnerCopyrightId)
       throw new Exception("Только владелец авторских прав может давать доступ.");
 
@@ -83,8 +78,7 @@ public class ItemBlueprint
   }
 }
 
-public class ItemBlueprintRecipe
-{
+public class ItemBlueprintRecipe {
   public Guid RecipeItemId { get; private set; }
   public virtual ItemBlueprint RecipeItem { get; private set; }
 
@@ -95,8 +89,7 @@ public class ItemBlueprintRecipe
 
   protected ItemBlueprintRecipe() { }
 
-  internal ItemBlueprintRecipe(ItemBlueprint ingredient, ItemBlueprint result, decimal amount)
-  {
+  internal ItemBlueprintRecipe(ItemBlueprint ingredient, ItemBlueprint result, decimal amount) {
     RecipeItem = ingredient;
     RecipeItemId = ingredient.Id;
     CraftItem = result;
@@ -107,8 +100,7 @@ public class ItemBlueprintRecipe
   internal void UpdateAmount(decimal newAmount) => Amount = newAmount;
 }
 
-public enum MeasuredIn
-{
+public enum MeasuredIn {
   Pieces,
   Weight,
   Volume,

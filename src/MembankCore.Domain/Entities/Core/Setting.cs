@@ -2,16 +2,14 @@ using System.ComponentModel.DataAnnotations;
 
 namespace MembankCore.Domain.Entities.Core;
 
-public enum SettingValueType
-{
+public enum SettingValueType {
   Integer,
   String,
   Bool,
   Decimal
 };
 
-public class Setting
-{
+public class Setting {
   public string Key { get; private set; }
   public string? DisplayKey { get; private set; }
 
@@ -24,8 +22,7 @@ public class Setting
 
   protected Setting() { }
 
-  public Setting(string key, SettingValueType type, string value, string? displayKey, int? changerId)
-  {
+  public Setting(string key, SettingValueType type, string value, string? displayKey, int? changerId) {
     if (!ValidateValueAsync(value, type))
       throw new ArgumentException($"'{value}' не может быть записан в {key}, так как он не соответствует типу {type}");
 
@@ -36,8 +33,7 @@ public class Setting
     ChangedById = changerId;
   }
 
-  public void SetValue(string newValue, int? changerId)
-  {
+  public void SetValue(string newValue, int? changerId) {
     if (Value == newValue)
       return;
     if (!ValidateValueAsync(newValue, ValueType))
@@ -47,8 +43,7 @@ public class Setting
     ChangedAt = DateTime.UtcNow;
   }
 
-  private static bool ValidateValueAsync(string newValue, SettingValueType valueType) => valueType switch
-  {
+  private static bool ValidateValueAsync(string newValue, SettingValueType valueType) => valueType switch {
     SettingValueType.Integer => int.TryParse(newValue, out int _),
     SettingValueType.Decimal => decimal.TryParse(newValue, out decimal _),
     SettingValueType.Bool => bool.TryParse(newValue, out bool _),

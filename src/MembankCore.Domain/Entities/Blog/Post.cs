@@ -3,8 +3,7 @@ using System.ComponentModel.DataAnnotations.Schema;
 
 namespace MembankCore.Domain.Entities.Blog;
 
-public class Post
-{
+public class Post {
   public Guid Id { get; private set; }
   public string Title { get; private set; }
   public string Content { get; private set; }
@@ -16,8 +15,7 @@ public class Post
 
   protected Post() { }
 
-  public Post(string title, string content, Guid blogId)
-  {
+  public Post(string title, string content, Guid blogId) {
     if (string.IsNullOrWhiteSpace(title))
       throw new Exception("Заголовок поста не может быть пустым.");
 
@@ -32,8 +30,7 @@ public class Post
     UpdatedAt = CreatedAt;
   }
 
-  public void Edit(string newTitle, string newContent)
-  {
+  public void Edit(string newTitle, string newContent) {
     if (string.IsNullOrWhiteSpace(newTitle) || string.IsNullOrWhiteSpace(newContent))
       throw new Exception("Заголовок и содержание не могут быть пустыми при редактировании.");
 

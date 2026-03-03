@@ -5,8 +5,7 @@ using MembankCore.Domain.ValueObjects;
 
 namespace MembankCore.Domain.Entities.Trading;
 
-public class ProvideService
-{
+public class ProvideService {
   public Guid ServiceId { get; private set; }
   public virtual Service Service { get; private set; }
 
@@ -22,8 +21,7 @@ public class ProvideService
   public DateTime? ExpiresAt { get; private set; }
 }
 
-public enum ProvideStatus
-{
+public enum ProvideStatus {
   Active,
   Succesess, // Only for once services
   Cancel,

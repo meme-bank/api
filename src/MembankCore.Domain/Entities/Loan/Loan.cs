@@ -3,8 +3,7 @@ using MembankCore.Domain.ValueObjects;
 
 namespace MembankCore.Domain.Entities.Loan;
 
-public enum LoanStatus
-{
+public enum LoanStatus {
   Pending,
   Approved,
   Rejected,
@@ -12,8 +11,7 @@ public enum LoanStatus
   Closed
 }
 
-public class Loan
-{
+public class Loan {
   public Guid Id { get; private set; }
   public int BorrowerId { get; private set; } // Кто взял кредит
 
@@ -30,8 +28,7 @@ public class Loan
 
   // Методы
   //
-  public Loan(int borrowerId, Money amount, Currency currency, decimal interestRate, LoanStatus status = LoanStatus.Pending)
-  {
+  public Loan(int borrowerId, Money amount, Currency currency, decimal interestRate, LoanStatus status = LoanStatus.Pending) {
     if (amount.CurrencyId != currency.Id)
       throw new Exception("Валюта суммы не совпадает с объектом валюты.");
 
@@ -42,8 +39,7 @@ public class Loan
     RemainingAmount = amount;
   }
 
-  public void Increment(DateTime now, int daysInYear)
-  {
+  public void Increment(DateTime now, int daysInYear) {
     if (Status != LoanStatus.Approved)
       throw new InvalidOperationException("Кредит не открыт.");
     Money dailyDebt = (PrincipalAmount * InterestRate) / daysInYear;
@@ -51,28 +47,24 @@ public class Loan
     LastInterestAccrual = now;
   }
 
-  public void Approve()
-  {
+  public void Approve() {
     if (Status != LoanStatus.Pending)
       throw new InvalidOperationException("Можно одобрить только ожидающий кредит.");
     Status = LoanStatus.Approved;
   }
 
-  public void Reject()
-  {
+  public void Reject() {
     if (Status != LoanStatus.Pending)
       throw new InvalidOperationException("Нельзя отклонить уже обработанный кредит.");
     Status = LoanStatus.Rejected;
   }
 
   // ТОЛЬКО ДЛЯ ТЕСТОВ
-  public void UpdateStatus(LoanStatus status)
-  {
+  public void UpdateStatus(LoanStatus status) {
     Status = status;
   }
 
-  public void Repay(Money amount)
-  {
+  public void Repay(Money amount) {
     if (Status != LoanStatus.Approved)
       throw new InvalidOperationException("Кредит не открыт.");
     if (amount.CurrencyId != this.CurrencyId)
@@ -82,8 +74,7 @@ public class Loan
     if (amount > RemainingAmount)
       throw new ArgumentException($"Кредит слишком маленький для этой суммы. Чтобы его закрыть требуется {RemainingAmount}, а не {amount}.");
     RemainingAmount -= amount;
-    if (RemainingAmount == 0)
-    {
+    if (RemainingAmount == 0) {
       Status = LoanStatus.Closed;
     }
   }

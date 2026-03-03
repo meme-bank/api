@@ -1,23 +1,20 @@
+using MembankCore.Domain.Entities.Core;
 using MembankCore.Domain.Entities.Economic;
 using MembankCore.Domain.ValueObjects;
-using MembankCore.Domain.Entities.Core;
 using Xunit;
 
 namespace MembankCore.Domain.Tests.Entities.Economic;
 
-public class WalletTests
-{
+public class WalletTests {
   private readonly Currency _testCurrency = new("LMC", "Левро", new(1, PhotoType.Icon)); // Photo можно null для тестов, если логика позволяет
 
-  private Wallet CreateTestWallet(decimal initialAmount = 0)
-  {
+  private Wallet CreateTestWallet(decimal initialAmount = 0) {
     var initialBalance = new Money(initialAmount, _testCurrency.Id);
     return new Wallet(1, _testCurrency, initialBalance, "Test");
   }
 
   [Fact]
-  public void Deposit_ShouldIncreaseBalance_WhenAmountIsPositive()
-  {
+  public void Deposit_ShouldIncreaseBalance_WhenAmountIsPositive() {
     // Arrange
     var wallet = CreateTestWallet(100m);
     var depositAmount = new Money(50m, _testCurrency.Id);
@@ -31,8 +28,7 @@ public class WalletTests
   }
 
   [Fact]
-  public void Withdraw_ShouldDecreaseBalance_WhenFundsAreSufficient()
-  {
+  public void Withdraw_ShouldDecreaseBalance_WhenFundsAreSufficient() {
     // Arrange
     var wallet = CreateTestWallet(100m);
     var withdrawAmount = new Money(30m, _testCurrency.Id);
@@ -45,8 +41,7 @@ public class WalletTests
   }
 
   [Fact]
-  public void Withdraw_ShouldThrowInvalidOperationException_WhenFundsAreInsufficient()
-  {
+  public void Withdraw_ShouldThrowInvalidOperationException_WhenFundsAreInsufficient() {
     // Arrange
     var wallet = CreateTestWallet(50m);
     var withdrawAmount = new Money(100m, _testCurrency.Id);
@@ -61,8 +56,7 @@ public class WalletTests
   [Theory]
   [InlineData(-10)]
   [InlineData(-0.01)]
-  public void Deposit_ShouldThrowArgumentException_WhenAmountIsNegative(decimal negativeValue)
-  {
+  public void Deposit_ShouldThrowArgumentException_WhenAmountIsNegative(decimal negativeValue) {
     // Arrange
     var wallet = CreateTestWallet();
     var negativeMoney = new Money(negativeValue, _testCurrency.Id);
@@ -72,8 +66,7 @@ public class WalletTests
   }
 
   [Fact]
-  public void Operation_WithWrongCurrency_ShouldThrow()
-  {
+  public void Operation_WithWrongCurrency_ShouldThrow() {
     // Arrange
     var wallet = CreateTestWallet(100m);
     var usdMoney = new Money(50m, "USD");
