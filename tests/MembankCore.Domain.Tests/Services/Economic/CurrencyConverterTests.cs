@@ -13,6 +13,7 @@ public class CurrencyConverterTests {
       code,
       code,
       rate,
+      1,
       new Photo(1, PhotoType.Icon)
     );
   }

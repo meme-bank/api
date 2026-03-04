@@ -1,5 +1,9 @@
 namespace MembankCore.Domain.Entities.Economic;
 
+/// <summary>
+/// Класс истории изменения курса валюты
+/// </summary>
+/// <seealso cref="Currency"/>
 public class CurrencyRateHistory {
   public Guid Id { get; private set; } = Guid.NewGuid();
   public string CurrencyId { get; private set; }

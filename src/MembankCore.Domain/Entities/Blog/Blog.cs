@@ -1,5 +1,3 @@
-using System.ComponentModel.DataAnnotations;
-using System.ComponentModel.DataAnnotations.Schema;
 using MembankCore.Domain.Entities.Core;
 
 namespace MembankCore.Domain.Entities.Blog;

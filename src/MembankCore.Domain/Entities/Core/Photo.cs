@@ -1,6 +1,3 @@
-using System.ComponentModel.DataAnnotations;
-using System.ComponentModel.DataAnnotations.Schema;
-
 namespace MembankCore.Domain.Entities.Core;
 
 public record PhotoMetadata(int Width, int Height, double AspectRatio);

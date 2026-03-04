@@ -7,7 +7,7 @@ using Xunit;
 namespace MembankCore.Domain.Tests.Entities.Loan;
 
 public class LoanTests {
-  private readonly Currency _testCurrency = new("LMC", "Левро", 1.0m, new Photo(1, PhotoType.Icon));
+  private readonly Currency _testCurrency = new("LMC", "Левро", 1.0m, 1, new Photo(1, PhotoType.Icon));
 
   private Domain.Entities.Loan.Loan CreateTestLoan(decimal principalAmount = 10_000m, decimal interestRate = 0.15m) {
     // Создаем Money через статический метод или конструктор
@@ -18,15 +18,14 @@ public class LoanTests {
   [Fact]
   public void Increment_WhenLoanStatusIsApproved() {
     var loan = CreateTestLoan();
-    var now = DateTime.UtcNow;
 
-    loan.Increment(now, 1);
+    loan.Increment(1);
 
     // Сравниваем Money с Money или проверяем конкретное поле Amount
     Assert.Equal(11_500m, loan.RemainingAmount.Amount);
     Assert.Equal(10_000m, loan.PrincipalAmount.Amount);
     Assert.Equal(_testCurrency.Id, loan.RemainingAmount.CurrencyId);
-    Assert.Equal(now, loan.LastInterestAccrual);
+    // Assert.Equal(now, loan.LastInterestAccrual); API Changes
   }
 
   [Fact]
@@ -60,7 +59,7 @@ public class LoanTests {
     var loan = CreateTestLoan();
     loan.UpdateStatus(status);
 
-    Assert.Throws<InvalidOperationException>(() => loan.Increment(DateTime.UtcNow, 12));
+    Assert.Throws<InvalidOperationException>(() => loan.Increment(12));
   }
 
   [Theory]

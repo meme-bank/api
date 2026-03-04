@@ -7,16 +7,26 @@ public enum LoanStatus {
   Pending,
   Approved,
   Rejected,
-  Disbursed,
+  Disbursed, // Пока не используем, может быть потом
   Closed
 }
 
+public enum LoanType {
+  Defferential,
+  Auuetient
+}
+
+/// <summary>
+/// Класс долга (кредита)
+/// </summary>
 public class Loan {
   public Guid Id { get; private set; }
   public int BorrowerId { get; private set; } // Кто взял кредит
 
   public Money PrincipalAmount { get; private set; } // Тело кредита
   public Money RemainingAmount { get; private set; }// Сколько осталось вернуть (с процентами)
+
+  public LoanType Type { get; private set; }
 
   public string CurrencyId => RemainingAmount.CurrencyId;
   public virtual Currency Currency { get; private set; }
@@ -37,26 +47,35 @@ public class Loan {
     Status = status;
     PrincipalAmount = amount;
     RemainingAmount = amount;
+    Currency = currency;
   }
 
-  public void Increment(DateTime now, int daysInYear) {
+  /// <summary>
+  /// Добавить долга с процентом. Процент <see cref="InterestRate"/> от <see cref="PrincipalAmount"/> прибаляется к
+  /// <see cref="RemainingAmount"/>
+  /// </summary>
+  /// <param name="daysInYear">Сколько дней в году по РП</param>
+  /// <exception cref="InvalidOperationException">Выдаёт исключение если кредит не открыт</exception>
+  public void Increment(int daysInYear) {
     if (Status != LoanStatus.Approved)
       throw new InvalidOperationException("Кредит не открыт.");
-    Money dailyDebt = (PrincipalAmount * InterestRate) / daysInYear;
+    Money ofAmount = Type == LoanType.Auuetient ? PrincipalAmount * InterestRate  : RemainingAmount * InterestRate;
+    Money dailyDebt = ofAmount / daysInYear;
     RemainingAmount += dailyDebt;
-    LastInterestAccrual = now;
+    LastInterestAccrual = DateTime.UtcNow;
   }
+
 
   public void Approve() {
     if (Status != LoanStatus.Pending)
       throw new InvalidOperationException("Можно одобрить только ожидающий кредит.");
-    Status = LoanStatus.Approved;
+    UpdateStatus(LoanStatus.Approved);
   }
 
   public void Reject() {
     if (Status != LoanStatus.Pending)
       throw new InvalidOperationException("Нельзя отклонить уже обработанный кредит.");
-    Status = LoanStatus.Rejected;
+    UpdateStatus(LoanStatus.Rejected);
   }
 
   // ТОЛЬКО ДЛЯ ТЕСТОВ

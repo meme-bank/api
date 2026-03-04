@@ -6,7 +6,7 @@ using Xunit;
 namespace MembankCore.Domain.Tests.Entities.Economic;
 
 public class WalletTests {
-  private readonly Currency _testCurrency = new("LMC", "Левро", 1.0m, new(1, PhotoType.Icon));
+  private readonly Currency _testCurrency = new("LMC", "Левро", 1.0m, 1, new(1, PhotoType.Icon));
 
   private Wallet CreateTestWallet(decimal initialAmount = 0) {
     Money initialBalance = new(initialAmount, _testCurrency.Id);

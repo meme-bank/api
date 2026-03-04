@@ -1,5 +1,3 @@
-using System.ComponentModel.DataAnnotations;
-
 namespace MembankCore.Domain.Entities.Core;
 
 public enum SettingValueType {

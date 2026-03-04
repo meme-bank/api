@@ -1,5 +1,3 @@
-using System.ComponentModel.DataAnnotations;
-using System.ComponentModel.DataAnnotations.Schema;
 using MembankCore.Domain.ValueObjects;
 
 namespace MembankCore.Domain.Entities.Economic {

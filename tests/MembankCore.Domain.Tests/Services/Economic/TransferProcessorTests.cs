@@ -16,6 +16,7 @@ public class TransferProcessorTests {
       code,
       code,
       rate,
+      1,
       new Photo(1, PhotoType.Icon)
     );
   }
