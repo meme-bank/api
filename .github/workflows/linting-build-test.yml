@@ -45,7 +45,7 @@ jobs:
         DataCollectionRunSettings.DataCollectors.DataCollector.Configuration.Exclude="[*Test*]*,[xunit*]*,][*/tests/*]"
 
     - name: Generate Coverage Reports
-      uses: danielpalme/ReportGenerator-GitHub-Action@5.5.4
+      uses: danielpalme/ReportGenerator-GitHub-Action@5.5.10
       with:
         reports: 'coverage/**/coverage.cobertura.xml'
         targetdir: 'coveragereport'
